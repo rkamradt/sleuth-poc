@@ -26,11 +26,18 @@ import static org.springframework.web.reactive.function.server.ServerResponse.ok
 @Component
 @Profile("mailroom")
 public class MailroomController {
-    @Autowired
-    BaggageField userIdField;
+    @Value("${stockroom.server}")
+    String stockroomServer="http://localhost:8080/stockroom";
+    // create the web client via a bean so that sleuth can instrument it with headers
+    @Bean
+    WebClient getWebClient() {
+        return WebClient.create(stockroomServer);
 
-@Bean
-    RouterFunction<?> getMailroomRoute(MailroomRepository repository, WebClient webClient) {
+    }
+    @Bean
+    RouterFunction<?> getMailroomRoute(MailroomRepository repository,
+                                       WebClient webClient,
+                                       BaggageField userIdField) {
         return route(GET("/mailroom/{id}"),
                 request -> {
                     log.info("in get by id {}", request.pathVariable("id"));

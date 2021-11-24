@@ -12,8 +12,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 @SpringBootApplication
 public class FactoryApplication {
-	@Value("${stockroom.server}")
-	String stockroomServer="http://localhost:8080/stockroom";
 
 	public static void main(String[] args) {
 		SpringApplication.run(FactoryApplication.class, args);
@@ -33,12 +31,6 @@ public class FactoryApplication {
 						.flushOnUpdate()
 						.build())
 				.build();
-	}
-	// create the web client via a bean so that sleuth can insturment it with headers
-	@Bean
-	WebClient getWebClient() {
-		return WebClient.create(stockroomServer);
-
 	}
 
 }
